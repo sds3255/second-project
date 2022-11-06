@@ -1,0 +1,67 @@
+@charset "UTF-8";
+	table {
+		width: 800px;
+		margin: 30px auto 0;
+		border: 1px solid black;
+		border-collapse: collapse;
+		font-size: 0.8em;
+	}
+	th, td { 
+		border: 1px solid black; 
+		padding: 4px; 
+	}
+	.red { color: red; }
+	td { text-align: center; }
+	img {
+  		width: 150px;
+  		height: 180px;
+  		object-fit: cover;
+	}
+	#page .paging { 
+		text-align: center;
+		display: inline-block;
+ 		list-style: none;  
+	}
+	#page .paging li { 
+		float: left;
+ 		margin-right: 8px;
+	}
+	#page .paging li a {
+		text-decoration: none;
+		display: block;
+		padding: 0.2px 7px;
+		border: 0px solid #00B3DC;
+		color : black;
+		border: 1px dotted black;
+	}
+	#page .paging .disable {
+		border: 1px solid silver;
+		padding: 3px 7px;
+		font-size: 1.1em;
+		color: silver;
+	}
+	#page .paging .now {
+		border: 2px solid black;
+		padding: 2px 7px;
+		font-size: 1.1em;
+	}
+	#page {
+		display: flex; 
+		justify-content: center;
+	}
+	input[type="text"]{
+ 		line-height: 16px;
+  		vertical-align: middle; 
+	}
+	select{
+ 		height: 27px;
+   		vertical-align: middle; 
+	}
+	form button {
+		height: 34px;
+    	vertical-align: middle;
+	}
+	form {
+	 	position: absolute;
+		left: 51.5%;
+	}

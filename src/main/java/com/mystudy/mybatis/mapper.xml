@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="shop">
+
+	<!-- select 태그 3개 속성 id, resultType, parameterType 
+		id : 사용할 명칭(필수항목), 현재 매퍼에서 유일한 이름 사용
+		resultType : 조회결과값 저장하기 위한 데이터 타입(1개 데이터에 대한 타입지정)
+		parameterType : 전달 받은 파라미터 데이터의 타입 지정(선택적)
+	-->
+	
+	<!-- 전체 게시글 갯수 조회 -->
+	<select id="totalCount" resultType="int">
+		SELECT COUNT(*) AS CNT FROM QNA
+	</select>
+	
+	<select id="RtotalCount" resultType="int">
+		SELECT COUNT(*) AS CNT FROM REVIEW
+	</select>
+
+	<!-- 검색한 게시글 갯수 조회 -->
+	<select id="searchCount" resultType="int">
+		SELECT COUNT(*) AS CNT FROM QNA
+		<choose>
+		<when test="idx == 0">
+		WHERE ID = #{keyword}
+		</when>
+		<when test="idx == 1">
+			WHERE Q_TITLE like '%' || #{keyword} || '%'
+		</when>
+		<otherwise>
+				WHERE 1 = 2
+		</otherwise>
+		</choose>
+	</select>
+	<!-- 리뷰 검색 게시글 갯수 -->
+	<select id="revSearchCount" resultType="int">
+		SELECT COUNT(*) AS CNT FROM REVIEW
+		<choose>
+		<when test="idx == 0">
+		WHERE ID = #{keyword}
+		</when>
+		<when test="idx == 1">
+			WHERE TITLE like '%' || #{keyword} || '%'
+		</when>
+		<otherwise>
+				WHERE 1 = 2
+		</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 게시글 작성 -->
+	<insert id="qnainsert" parameterType="qnaVO">
+		INSERT INTO QNA (Q_NUM, CUSTID, Q_TITLE, Q_CONTENTS, Q_DATE, ID, Q_PWD)
+		VALUES(Q_NUM.NEXTVAL, #{custid}, #{qTitle},#{qContents}, 
+		SYSDATE, #{id}, #{qPwd})
+	</insert>
+	
+	<insert id="revInsert" parameterType="reVO">
+		INSERT INTO REVIEW (B_NUM, TITLE, B_CONTENTS, PRODUCT_NAME, B_DATE, ID, FILE_NAME, ORI_NAME, hits)
+		VALUES(B_NUM.NEXTVAL, #{title}, #{bContents}, #{productName},
+		SYSDATE, #{id}, #{fileName}, #{oriName},1)
+	</insert>
+	
+	
+	<!-- 아이디로 회원 정보조회 -->
+	<select id="idselect" resultType="string" >
+		SELECT ID, ADDR, PWD, CUSTID, NAME, PHONE
+		FROM COSTOMER
+		WHERE ID = #{id}
+	</select>
+	
+	<!-- 전체 게시글 조회 -->
+	<select id="getlist" parameterType="map" resultType="qnaVO">
+		SELECT * FROM 
+		    (SELECT ROWNUM R_NUM, B.* from 
+		        (SELECT * from QNA ORDER BY Q_NUM DESC) B
+		    )
+		WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select>
+	
+	
+	<select id="Rgetlist" parameterType="map" resultType="reVO">
+		SELECT * FROM 
+		    (SELECT ROWNUM R_NUM, B.* from 
+		        (SELECT * from REVIEW ORDER BY B_NUM DESC) B
+		    )
+		WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<!-- 게시글 검색 기능 -->
+	<select id="search" parameterType="map" resultType="qnaVO" >
+			SELECT * FROM 
+			(SELECT ROWNUM R_NUM, B.* from 
+			(SELECT * from QNA 
+			<choose>
+			<when test="idx == 0">
+			WHERE ID = #{keyword}
+			</when>
+			
+			<when test="idx == 1">
+				WHERE Q_TITLE like '%' || #{keyword} || '%'
+			</when>
+			<otherwise>
+				WHERE 1 = 2
+			</otherwise>
+			</choose>
+			ORDER BY Q_NUM DESC ) B)
+			WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<select id="revSearch" parameterType="map" resultType="reVO" >
+			SELECT * FROM 
+			(SELECT ROWNUM R_NUM, B.* from 
+			(SELECT * from REVIEW 
+			<choose>
+			<when test="idx == 0">
+			WHERE ID = #{keyword}
+			</when>
+			
+			<when test="idx == 1">
+				WHERE TITLE like '%' || #{keyword} || '%'
+			</when>
+			<otherwise>
+				WHERE 1 = 2
+			</otherwise>
+			</choose>
+			ORDER BY B_NUM DESC ) B)
+			WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select>
+
+	
+	<!-- 조회수 증가 처리 -->
+	<update id="upHit" parameterType="int">
+		UPDATE QNA SET Q_HITS = Q_HITS + 1
+		WHERE Q_NUM = #{qNum} 
+	</update>
+	
+	<update id="rUpHit" parameterType="int">
+		UPDATE REVIEW SET HITS = HITS + 1
+		WHERE B_NUM = #{bNum} 
+	</update>
+	
+	<!-- 게시글 상세보기 -->
+	<select id="selectOne" parameterType="integer" resultType="qnaVO">
+		SELECT * FROM QNA 
+		WHERE Q_NUM = #{qNum}
+	</select>
+	
+	<!-- 게시글 상세보기 리뷰 -->
+	<select id="selectOneRev" parameterType="integer" resultType="reVO">
+		SELECT * FROM REVIEW 
+		WHERE B_NUM = #{bNum}
+	</select>
+	
+	<!-- 게시글 수정 비밀번호 확인 -->
+	<select id="pwdcheack"  parameterType="integer" resultType="string">
+		SELECT Q_PWD FROM QNA
+		WHERE Q_NUM = #{qNum}
+	</select>
+	
+	<update id="qnaUpdate" parameterType="qnaVO">
+		UPDATE QNA SET Q_TITLE = #{qTitle},
+					   Q_CONTENTS = #{qContents},
+					   Q_PWD = #{qPwd},
+					   Q_DATE = SYSDATE
+		WHERE Q_NUM = #{qNum}
+	</update>
+	<!-- 리뷰게시판 수정 -->
+	<update id="rUpdate" parameterType="reVO">
+		UPDATE REVIEW SET TITLE = #{title},
+					   B_CONTENTS = #{bContents},
+					   FILE_NAME = #{fileName},
+					   ORI_NAME = #{fileName},
+					   B_DATE = SYSDATE
+		WHERE B_NUM = #{bNum}
+	</update>
+	<!-- 게시글 삭제 -->
+	<delete id="qnaDelete" parameterType="integer">
+		DELETE QNA WHERE Q_NUM = #{qNum}
+	</delete>
+	
+	<!-- 리뷰게시글 삭제 -->
+	<delete id="rDelete" parameterType="integer">
+		DELETE REVIEW WHERE B_NUM = #{bNum}
+	</delete>
+	
+	<!-- 구매상품 조회 -->
+	<select id="pList" parameterType="string" resultType="proVO">
+		SELECT * FROM ORDER_LIST WHERE ID = #{id}
+	</select>
+	
+	<!-- 댓글 입력 -->
+	<insert id="cmtInsert" parameterType="rcVO">
+		INSERT INTO REVIEW_CMT(C_NUM, ID, CONTENT, B_NUM, C_DATE)
+		VALUES(c_num.nextval, #{id}, #{content}, #{bNum}, sysdate)
+	</insert>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="cmtDelete" parameterType="int">
+		DELETE REVIEW_CMT WHERE C_NUM = #{cNum}
+	</delete>
+	
+	<!-- 댓글 수정 -->
+	<update id="cmtUpdate" parameterType="rcVO">
+		UPDATE REVIEW_CMT SET CONTENT = #{content},
+							  C_DATE = SYSDATE
+		WHERE C_NUM = #{cNum}
+		
+	</update>
+	
+	<!-- 댓글 리스트 조회 -->
+	<select id="cmtList" parameterType="int" resultType="rcVO">
+		SELECT * FROM REVIEW_CMT
+		WHERE B_NUM = #{bNum}
+	</select>
+	
+			<!-- Product >>>>>>>>>>>>>>>>>>>>>>>>>>  -->
+
+<!-- 검색한 상품 갯수 -->
+	<select id="searchCount1" resultType="int" parameterType="string">
+	SELECT COUNT(*)
+	FROM (SELECT ROWNUM R_NUM, B.*
+		FROM (SELECT * 
+			FROM PRODUCT
+			WHERE PRODUCT_NAME LIKE '%' || #{keyword} || '%'
+			
+		ORDER BY PRODUCT_NUM
+			) B
+	)
+	</select>
+	<!-- 상품 검색 기능 -->
+	<select id="searchPro" parameterType="map" resultType="productVO">
+		SELECT * 
+        FROM (SELECT ROWNUM R_NUM, P.*
+        FROM (SELECT * FROM PRODUCT
+        WHERE PRODUCT_NAME LIKE '%' || #{keyword} || '%'
+       	 ORDER BY PRODUCT_NUM
+		  		 		 ) P
+		  		 )
+		WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select>
+	
+
+	<!-- 케이스 전체 조회 -->
+	<select id="list" resultType="productVO">
+		SELECT * FROM PRODUCT ORDER BY PRODUCT_NUM
+	</select>  
+	
+	<select id="ca" parameterType="String" resultType="productVO" >
+		SELECT *
+		FROM PRODUCT
+		WHERE CATEGORY = #{category}
+	</select>
+	
+	<select id="one" parameterType="string" resultType="productVO">
+		SELECT *
+	 	FROM PRODUCT
+	 	WHERE PRODUCT_NUM = #{productNum } 
+	</select> 
+	
+	<!-- 케이스 카테고리별 갯수 전체 조회 -->
+	<select id="totalCount1" resultType="int" parameterType="String">
+		SELECT COUNT(*) AS CNT
+		FROM PRODUCT
+		WHERE CATEGORY = #{category}
+	</select>
+	
+	<!-- 케이스 갯수 전체 조회 -->
+	<select id="totalCount2" resultType="int">
+		SELECT COUNT(*) AS CNT
+		FROM PRODUCT
+	</select>
+	
+	
+	<!-- 페이지에 해당하는 케이스 조회 -->
+	<select id="clist" parameterType="map" resultType="productVO">
+		SELECT *
+		  FROM(SELECT ROWNUM R_NUM, P.*
+		  		 FROM (SELECT *
+		  		 		 FROM PRODUCT
+						 WHERE CATEGORY = #{category}
+		  		 		 ORDER BY PRODUCT_NUM ASC
+		  		 		 ) P
+		  		 )
+		  		 
+		  WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select> 
+	
+	
+	<!-- 페이지에 해당하는 케이스 조회 -->
+	 <select id="plist" parameterType="map" resultType="productVO">
+		SELECT *
+		  FROM(SELECT ROWNUM R_NUM, P.*
+		  		 FROM (SELECT *
+		  		 		 FROM PRODUCT
+		  		 		 
+		  		 		 <if test="category == 'PC001'">
+		  		 		 	WHERE CATEGORY LIKE CONCAT('%', #{category}, '%')
+		  		 		 </if>
+		  		 		 
+		  		 		 <if test="category == 'AC002'">
+		  		 		 	WHERE CATEGORY LIKE CONCAT('%', #{category}, '%')
+		  		 		 </if>
+		  		 		 
+		  		 		 ORDER BY PRODUCT_NUM ASC
+		  		 		 ) P
+		  		 )
+		  		 
+		  WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select> 
+	
+		<!-- 장바구니 담기  -->
+		<insert id="cartadd" parameterType="map">
+			{call P_C_ADD(#{productnum},#{id},#{count},#{model})}
+		</insert>
+		
+		<!-- 가격낮은순 조회 -->
+		<select id="lowprice">
+		 	SELECT *
+			FROM ( SELECT ROWNUM R_NUM, B.*
+            	  FROM (SELECT * 
+                         	   FROM PRODUCT                              
+                         	   ORDER BY PRICE DESC) B
+          							)
+			WHERE R_NUM BETWEEN :begin AND :end;
+		</select>
+
+		<!-- Cart&Payment>>>>>>>>>>>>>>>>>>>>>>>>>>  -->
+
+ 	<update id="update" parameterType="map">
+ 	UPDATE CART SET C_COUNT=#{cCount}  WHERE C_NUM = #{cNum}
+ 	</update>
+ 	
+ 	<update id="delete" parameterType="int">
+ 	DELETE FROM CART WHERE C_NUM=#{cNum}
+ 	</update>
+ 	
+ 	<select id="search1" parameterType="int" resultType="cart">
+ 	SELECT * FROM CART WHERE C_NUM=#{cNum}
+ 	</select>
+ 	
+ 	<select id="searchOrder" parameterType="String" resultType="order_list">
+ 	SELECT * FROM ORDER_LIST  WHERE ID=#{id}
+ 	</select>
+ 	
+ 	<insert id="insert" parameterType="map" statementType="CALLABLE">
+	{call O_C_ADD(#{cNum},#{dName},#{dAdress},#{dPhonenum},#{dMemo},#{dPayment},#{sequence},#{totalprice},#{totalpayprice})}
+ 	</insert>
+ 	
+ 	<insert id="insertreorder" parameterType="map" statementType="CALLABLE">
+	{call O_O_ADD(#{oNum},#{dName},#{dAdress},#{dPhonenum},#{dMemo},#{dPayment},#{sequence},#{totalPrice},#{totalPayPrice})}
+ 	</insert>
+ 	
+ 	<select id="payinfo" parameterType="int" resultType="com.mystudy.Project_shop.vo.PayInfoVO">
+ 	 SELECT DISTINCT * FROM PAY_INFO WHERE O_NUM=#{onumm}
+ 	</select>
+ 	
+ 	<select id="detail" resultType="order_list" parameterType="int">
+ 	SELECT * FROM ORDER_LIST WHERE O_NUM=#{onumm}
+ 	</select>
+ 	
+ 	<select id="searchCustomer" parameterType="String" resultType="cVO">
+ 	SELECT * FROM CUSTOMER WHERE ID= #{id}
+ 	</select>
+ 	
+ 	<select id="searchId" parameterType="String" resultType="order_list">
+ 	SELECT * FROM ORDER_LIST WHERE ID= #{id}
+ 	</select>
+ 	
+ 	<insert id="CartAdd" parameterType="int">
+ 	INSERT INTO CART (C_NUM,PRODUCT_NUM,PRODUCT_NAME,C_COUNT,PRICE,SALEPRICE,IMAGE,ID,MODEL)
+	SELECT SEQ_CART.NEXTVAL,PRODUCT_NUM,PRODUCT_NAME,C_COUNT,PRICE,SALEPRICE,IMAGE,ID,MODEL FROM ORDER_LIST WHERE O_NUM=#{onumm}   
+ 	</insert>
+ 	
+ 	<update id="refund" parameterType="int">
+ 	UPDATE ORDER_LIST SET PAYMENT='환불완료' WHERE O_NUM=#{onumm}
+ 	</update>
+ 	
+ 	<update id="refundpayinfo" parameterType="int">
+ 	DELETE FROM PAY_INFO WHERE O_NUM=#{onumm}
+ 	</update>
+ 	
+ 	<!-- 장바구니용 -->
+ 	 <select id="totalCount3" parameterType="string" resultType="int">
+  	SELECT COUNT(*) AS CNT FROM CART WHERE ID=#{id}
+  	</select>
+  	
+ 	
+ 	<!-- 장바구니용 -->
+ 	<select id="getlist1" parameterType="map" resultType="cart">
+ 	SELECT *
+	FROM ( SELECT ROWNUM R_NUM, B.*
+            	  FROM (SELECT * 
+                         	   FROM CART
+                               WHERE ID=#{id}
+                         	   ORDER BY C_NUM DESC) B
+          		)
+	WHERE R_NUM BETWEEN #{begin} AND #{end}
+ 	</select>
+ 	
+ 	
+  	<!-- 주문내역용  -->
+ 	 <select id="totalCnt" parameterType="string" resultType="int">
+  	SELECT COUNT(*) AS CNT FROM ORDER_LIST WHERE ID=#{id}
+  	</select>
+  	
+  	<!-- 주문내역용  -->
+  	<select id="getlistorder" parameterType="map" resultType="order_list">
+ 	SELECT *
+	FROM ( SELECT ROWNUM R_NUM, B.*
+            	  FROM (SELECT * 
+                         	   FROM ORDER_LIST
+                               WHERE ID=#{id}
+                         	   ORDER BY O_NUM DESC) B
+          		)
+	WHERE R_NUM BETWEEN #{begin} AND #{end}
+ 	</select>
+	<select id="sequence" resultType="int" >
+	 SELECT SEQ_ONUM.NEXTVAL FROM DUAL
+	</select>
+</mapper>
+
+
+

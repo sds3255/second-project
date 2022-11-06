@@ -1,0 +1,56 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Anton&display=swap');
+
+#wrap { 
+		margin: 0 auto;
+		text-align: center;
+		font-family: 'Alfa Slab One', cursive;
+		font-family: 'Anton', sans-serif;
+	 }
+#wrap hr { 
+	width: inherit; 
+	border: 1px solid navy; 
+}
+#header, #nav {
+	width: 700px; 
+	margin: 10px auto;
+	text-align: center;
+}
+#header { font-size: 2em; }
+img { width: 1250px; }
+#nav a, #header a {
+  text-decoration: none;
+  color: black;
+  font-size: 20px;
+   padding: 15px; 
+  display:inline-block;
+}
+ul {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+ul li {display: inline-block;}
+ul li:hover ul {
+	display: block;
+	text-align: left;
+}
+ul li ul {
+  position: absolute;
+  width: 200px;
+  display: none;
+}
+ul li ul li { 
+	display: block;
+	
+}
+#header a:hover{
+		text-decoration: blink;
+		color: black; 
+}
+#nav a:hover{
+		color: silver; 
+}
+#header a{
+	font-size: 1.2em;
+}

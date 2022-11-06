@@ -1,0 +1,673 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="shop">
+	
+	<!-- ID받아서 비밀번호 찾기 -->
+	<select id="admingetAdinPwd" parameterType="string" resultType="string">
+		SELECT PWD
+		FROM CUSTOMER
+		WHERE ID = #{id}
+	</select>
+
+	<!-- 회원정보 전체받기 -->
+	<select id="adminselectCustAll"  parameterType="admincustomerVO" resultType="admincustomerVO">
+		SELECT CUSTID, NAME, ID, PWD, ADDR, PHONE, EMAIL
+		FROM CUSTOMER
+		ORDER BY CUSTID
+	</select>
+	
+	<!-- 회원아이디로 회원정보받기 -->
+	<select id="adminselectCustId" parameterType="admincustomerVO" resultType="admincustomerVO">
+		SELECT CUSTID, NAME, ID, PWD, ADDR, PHONE, EMAIL
+		FROM CUSTOMER
+		WHERE ID = #{id}
+	</select>
+	
+	<!-- 회원이름으로 회원정보받기 -->
+	<select id="adminselectCustName" parameterType="admincustomerVO" resultType="admincustomerVO">
+		SELECT CUSTID, NAME, ID, PWD, ADDR, PHONE, EMAIL
+		FROM CUSTOMER
+		WHERE NAME = #{name}
+	</select>
+	
+	<!-- 상품목록 전체받기 -->
+	<select id="adminproductAllList"  parameterType="adminproductVO" resultType="adminproductVO">
+		SELECT * FROM PRODUCT
+		ORDER BY PRODUCT_NUM
+	</select>
+	
+	<!-- 전체 상품 수 조회 -->
+	<select id="admintotalCount" resultType="int">
+		SELECT COUNT(*) AS CNT FROM PRODUCT
+	</select>
+	
+	<!-- 상품번호 받아서 해당상품 조회 -->
+	<select id="adminselectProduct" parameterType="adminproductVO" resultType="adminproductVO">
+		SELECT PRODUCT_NUM, CATEGORY, MODEL, PRODUCT_NAME, 
+			   PRICE, SALEPRICE, IMAGE, CONTENT, REGDATE 
+		FROM PRODUCT
+		WHERE PRODUCT_NUM = #{productNum}
+	</select>
+	
+	<!-- 상품수정(이미지포함)-->
+	<update id="adminupdateProductAll" parameterType="adminproductVO">
+		UPDATE PRODUCT
+		SET CATEGORY = #{category},
+			MODEL = #{model},
+			PRODUCT_NAME = #{productName}, 
+			PRICE = #{price},
+		    SALEPRICE = #{saleprice},
+		    IMAGE = #{image},
+		    CONTENT = #{content}
+		WHERE PRODUCT_NUM = #{productNum}
+	</update>
+	
+	<!-- 상품수정(이미지제외)-->
+	<update id="adminupdateProductExcept" parameterType="adminproductVO">
+		UPDATE PRODUCT
+		SET CATEGORY = #{category},
+			MODEL = #{model},
+			PRODUCT_NAME = #{productName}, 
+			PRICE = #{price},
+		    SALEPRICE = #{saleprice},
+		    CONTENT = #{content}
+		WHERE PRODUCT_NUM = #{productNum}
+	</update>
+	
+	<!-- 상품번호 받아서 삭제 -->
+	<delete id="admindeleteProduct" parameterType="string">
+		DELETE FROM PRODUCT 
+		WHERE PRODUCT_NUM = #{productNum}
+	</delete>
+	
+	<!-- 상품추가 -->
+	<insert id="admininsertProduct" parameterType="adminproductVO">
+		INSERT INTO PRODUCT (PRODUCT_NUM, CATEGORY, MODEL, PRODUCT_NAME, PRICE, SALEPRICE, IMAGE, CONTENT)
+		VALUES (PRODUCT_SEQ.NEXTVAL, #{category}, #{model}, #{productName}, #{price}, #{saleprice}, #{image}, #{content})
+	</insert>
+	
+	<!-- 페이지해 해당하는 회원수 조회-->
+	<select id="adminSearchCountProduct"  parameterType="map" resultType="int">
+	SELECT COUNT(*)
+	FROM (SELECT ROWNUM R_NUM, B.*
+        FROM (	SELECT *
+                FROM PRODUCT
+               <choose>
+	                <when test="select == 0">
+	                 WHERE CATEGORY LIKE '%' || UPPER(#{keyword}) || '%'
+	               	</when>
+					<when test="select == 1">
+					 WHERE MODEL LIKE '%' || UPPER(#{keyword}) || '%'
+					</when>
+					<otherwise>
+					 WHERE 1 = 2
+					</otherwise>
+				</choose>
+                ORDER BY PRODUCT_NUM
+             ) B 
+         )
+	</select>
+	
+	<!-- 페이지에 해당하는 상품 조회 -->
+	<select id="adminproductList" parameterType="map" resultType="adminproductVO">
+	SELECT *
+	FROM (SELECT ROWNUM R_NUM, B.*
+	        FROM (SELECT *
+	                FROM PRODUCT
+	                ORDER BY PRODUCT_NUM
+	             ) B 
+	         )
+	WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<!-- 상품동적검색 -->
+	<select id="adminsearchProduct" parameterType="map" resultType="adminproductVO">
+	SELECT *
+	FROM (SELECT ROWNUM R_NUM, B.*
+        FROM (	SELECT *
+                FROM PRODUCT
+                <choose>
+	                <when test="select == 0">
+	                 WHERE CATEGORY LIKE '%' || UPPER(#{keyword}) || '%'
+	               	</when>
+					<when test="select == 1">
+					 WHERE MODEL LIKE '%' || UPPER(#{keyword}) || '%'
+					</when>
+					<otherwise>
+					 WHERE 1 = 2
+					</otherwise>
+				</choose>
+                ORDER BY PRODUCT_NUM
+             ) B 
+         )
+	WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<!-- 전체 회원 수 조회 -->
+	<select id="admintotalCountMember" resultType="int">
+		SELECT COUNT(*) AS CNT FROM CUSTOMER
+	</select>
+	
+	<!-- 키워드에 해당하는 회원수 조회-->
+	<select id="adminsearchCountMember"  parameterType="map" resultType="int">
+	SELECT COUNT(*)
+	FROM (SELECT ROWNUM R_NUM, B.*
+        FROM (	SELECT *
+                FROM CUSTOMER
+               <choose>
+	                <when test="select == 0">
+	                WHERE NAME LIKE '%' || #{keyword} || '%'
+	               	</when>
+					<when test="select == 1">
+					WHERE ID LIKE '%' || #{keyword} || '%'
+					</when>
+					<otherwise>
+					WHERE 1 = 2
+					</otherwise>
+				</choose>
+                ORDER BY CUSTID
+             ) B 
+         )
+	</select>
+	
+	<!-- 페이지에 해당하는 회원 조회 -->
+	<select id="adminmemberList" parameterType="map" resultType="admincustomerVO">
+	SELECT *
+	FROM (SELECT ROWNUM R_NUM, B.*
+	        FROM (SELECT *
+	                FROM CUSTOMER
+	                ORDER BY CUSTID
+	             ) B 
+	         )
+	WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<!-- 회원동적검색 -->
+	<select id="adminsearchMember" parameterType="map" resultType="admincustomerVO">
+	SELECT *
+	FROM (SELECT ROWNUM R_NUM, B.*
+        FROM (	SELECT *
+                FROM CUSTOMER
+                <choose>
+	                <when test="select == 0">
+	                WHERE NAME  LIKE '%' || #{keyword} || '%'
+	               	</when>
+					<when test="select == 1">
+					WHERE ID  LIKE '%' || #{keyword} || '%'
+					</when>
+					<otherwise>
+					WHERE 1 = 2
+					</otherwise>
+				</choose>
+                ORDER BY CUSTID
+             ) B 
+         )
+	WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<!-- 전체 Q&A 수 조회 -->
+	<select id="admintotalCountQna" resultType="int">
+		SELECT COUNT(*) AS CNT FROM QNA
+	</select>
+	
+	<!-- 페이지에 해당하는 Q&A 조회 -->
+	<select id="adminqnaList" parameterType="map" resultType="adminqnaVO">
+	SELECT *
+	FROM (SELECT ROWNUM R_NUM, B.*
+	        FROM (	SELECT *
+	                FROM QNA
+	                ORDER BY Q_NUM DESC
+	             ) B 
+	         )
+	WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<!-- Q&A 리스트 가져오기 -->
+	<select id="adminselectQnaAll" parameterType="adminqnaVO" resultType="adminqnaVO">
+		SELECT *
+		FROM QNA
+		ORDER BY Q_NUM DESC
+	</select>
+	
+	<!-- Q&A 상세보기(스트링받기) -->
+	<select id="adminselectQnA" parameterType="string" resultType="adminqnaVO">
+		SELECT * FROM QNA
+		WHERE Q_NUM = #{qNum}
+	</select>
+	
+	<!-- Q&A 상세보기(vo받기) -->
+	<select id="adminselectQnAVO" parameterType="adminqnaVO" resultType="adminqnaVO">
+		SELECT * FROM QNA
+		WHERE Q_NUM = #{qNum}
+	</select>
+	
+	<!-- 검색된 Q&A 수 조회 -->
+	<select id="adminSearchCountQna"  parameterType="map" resultType="int">
+	SELECT COUNT(*)
+	FROM (SELECT ROWNUM R_NUM, B.*
+        FROM (	SELECT *
+                FROM QNA
+               <choose>
+	                <when test="select == 0">
+	                WHERE Q_TITLE LIKE '%' || #{keyword} || '%'
+	               	</when>
+					<when test="select == 1">
+					WHERE ID  LIKE '%' || #{keyword} || '%'
+					</when>
+					<otherwise>
+					WHERE 1 = 2
+					</otherwise>
+				</choose>
+                ORDER BY Q_NUM DESC
+             ) B 
+         )
+	</select>
+	
+	<!-- Q&A 동적검색 -->
+	<select id="adminsearchQna" parameterType="map" resultType="adminqnaVO">
+	SELECT *
+	FROM (SELECT ROWNUM R_NUM, B.*
+        FROM (	SELECT *
+                FROM QNA
+                <choose>
+	                <when test="select == 0">
+	                WHERE Q_TITLE  LIKE '%' || #{keyword} || '%'
+	               	</when>
+					<when test="select == 1">
+					WHERE ID  LIKE '%' || #{keyword} || '%'
+					</when>
+					<otherwise>
+					WHERE 1 = 2
+					</otherwise>
+				</choose>
+                ORDER BY Q_NUM DESC
+             ) B 
+         )
+	WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<!-- 답변작성 -->
+	<insert id="admininsertAnswer" parameterType="adminanswerVO">
+		INSERT INTO QNA_ANSWER (QA_NUM, Q_NUM, QA_TITLE, QA_CONTENTS)
+		VALUES (PRODUCT_SEQ.NEXTVAL, #{qNum}, #{qaTitle}, #{qaContents})
+	</insert>
+	
+	<!-- 답변 전체받기 -->
+	<select id="adminAnswerAllList"  parameterType="adminanswerVO" resultType="adminanswerVO">
+		SELECT * FROM QNA_ANSWER
+		ORDER BY QA_NUM DESC
+	</select>
+	
+	<!-- 답변 상세보기(스트링받기) -->
+	<select id="adminselectAnswer" parameterType="string" resultType="adminanswerVO">
+		SELECT * FROM QNA_ANSWER
+		WHERE QA_NUM = #{qaNum}
+	</select>
+	
+	<!-- 답변 상세보기(질문번호로 조회) -->
+	<select id="adminselectAnswerQnum" parameterType="adminanswerVO" resultType="adminanswerVO">
+		SELECT * FROM QNA_ANSWER
+		WHERE Q_NUM = #{qNum}
+	</select>
+
+	<!-- 답변+질문 합치기 -->
+	<select id="adminselectQnaAnswerAll" parameterType="adminqnaAnswerVO" resultType="adminqnaAnswerVO">
+		SELECT Q.*, A.QA_NUM, A.QA_TITLE, A.QA_CONTENTS, A.QA_DATE
+		FROM QNA Q, QNA_ANSWER A
+		WHERE Q.Q_NUM = A.Q_NUM
+		ORDER BY Q.Q_NUM DESC
+	</select>
+	
+	<!-- 답변+질문 합쳐서 번호별 조회 -->
+	<select id="adminselectQnaAnswer" parameterType="adminqnaAnswerVO" resultType="adminqnaAnswerVO">
+		SELECT Q.*, A.QA_NUM,A.QA_TITLE,A.QA_CONTENTS,A.QA_DATE
+		FROM QNA Q, QNA_ANSWER A
+		WHERE Q.Q_NUM = A.Q_NUM
+		AND Q.Q_NUM = #{qNum}
+	</select>
+	
+	<!-- 답변번호 받아서 조회 -->
+	<select id="adminselectAnswerOne" parameterType="adminanswerVO" resultType="adminanswerVO">
+		SELECT * FROM QNA_ANSWER
+		WHERE QA_NUM = #{qaNum}
+	</select>
+	
+	<!-- 답변번호 받아서 삭제 -->
+	<delete id="admindeleteAnswer" parameterType="string">
+		DELETE FROM QNA_ANSWER
+		WHERE QA_NUM = #{qaNum}
+	</delete>
+	
+	<!-- 답변수정-->
+	<update id="adminupdateAnswer" parameterType="adminanswerVO">
+		UPDATE QNA_ANSWER
+		SET QA_TITLE = #{qaTitle},
+			QA_CONTENTS = #{qaContents}
+		WHERE QA_NUM = #{qaNum}
+	</update>
+	
+	<!-- 전체 주문 수 -->
+	<select id="admintotalCountOrder" resultType="int">
+		SELECT COUNT(*)
+		FROM ORDER_LIST
+	</select>
+	
+	<!-- 페이지에 해당하는 주문 조회 -->
+	<select id="adminorderList" parameterType="map" resultType="adminorderVO">
+	SELECT *
+	FROM (SELECT ROWNUM R_NUM, B.*
+	        FROM (SELECT *
+	                FROM ORDER_LIST
+	                ORDER BY O_NUM DESC
+	             ) B 
+	         )
+	WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<!-- 키워드에 해당하는 주문수 조회-->
+	<select id="adminSearchCountorderList"  parameterType="map" resultType="int">
+	SELECT COUNT(*)
+	FROM (SELECT ROWNUM R_NUM, B.*
+        FROM (	SELECT *
+                FROM ORDER_LIST
+               <choose>
+	                <when test="select == 0">
+	                WHERE O_NUM LIKE '%' || #{keyword} || '%'
+	               	</when>
+					<when test="select == 1">
+					WHERE ID LIKE '%' || #{keyword} || '%'
+					</when>
+					<otherwise>
+					WHERE 1 = 2
+					</otherwise>
+				</choose>
+                ORDER BY O_NUM DESC
+             ) B 
+         )
+	</select>
+	
+	<!-- 키워드에 해당하는 주문 동적검색 -->
+	<select id="adminsearchOrder" parameterType="map" resultType="adminorderVO">
+	SELECT *
+	FROM (SELECT ROWNUM R_NUM, B.*
+        FROM (	SELECT *
+                FROM ORDER_LIST
+                <choose>
+	                <when test="select == 0">
+	                WHERE O_NUM  LIKE '%' || #{keyword} || '%'
+	               	</when>
+					<when test="select == 1">
+					WHERE ID  LIKE '%' || #{keyword} || '%'
+					</when>
+					<otherwise>
+					WHERE 1 = 2
+					</otherwise>
+				</choose>
+                ORDER BY O_NUM DESC
+             ) B 
+         )
+	WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<!-- 주문 리스트 가져오기 -->
+	<select id="adminselectOrderAll" parameterType="adminorderVO" resultType="adminorderVO">
+		SELECT *
+		FROM ORDER_LIST
+		ORDER BY O_NUM DESC
+	</select>
+	
+	<!-- 주문 상세보기(주문번호로 조회) -->
+	<select id="adminselectOrderOnum" parameterType="adminorderVO" resultType="adminorderVO">
+		SELECT * FROM ORDER_LIST
+		WHERE O_NUM = #{oNum}
+	</select>
+	
+	<!-- 답변없는 질문 갯수 -->
+	<select id="admintotalCountnoAnswerQna" resultType="int">
+		SELECT COUNT(*)
+		FROM QNA_ANSWER A RIGHT OUTER JOIN QNA Q
+		ON A.Q_NUM = Q.Q_NUM
+		WHERE QA_NUM IS NULL
+		ORDER BY Q.Q_NUM
+	</select>
+	
+	<!-- 페이지에 해당하는 답변없는 질문 리스트 -->
+	<select id="adminqnanoAnswerList" parameterType="map" resultType="adminqnaVO">
+		SELECT *
+		FROM ( SELECT ROWNUM R_NUM, B.*
+	    FROM ( SELECT Q.Q_NUM, Q.CUSTID, Q.PRODUCT_NAME, Q.Q_TITLE, Q.Q_CONTENTS, Q.ID, Q.Q_DATE, Q.Q_HITS, Q.Q_PWD
+	            FROM QNA_ANSWER A RIGHT OUTER JOIN QNA Q
+	            ON A.Q_NUM = Q.Q_NUM
+	            WHERE QA_NUM IS NULL
+	            ORDER BY Q.Q_NUM
+	         ) B 
+	     )
+		WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<!-- 키워드에 해당하는 답변없는 질문 수-->
+	<select id="adminSearchCountnoAnswerList"  parameterType="map" resultType="int">
+	SELECT COUNT(*)
+	FROM (SELECT ROWNUM R_NUM, B.*
+        FROM (	SELECT Q.Q_NUM, Q.CUSTID, Q.PRODUCT_NAME, Q.Q_TITLE, Q.Q_CONTENTS, Q.ID, Q.Q_DATE, Q.Q_HITS, Q.Q_PWD
+        		FROM QNA_ANSWER A RIGHT OUTER JOIN QNA Q
+	            ON A.Q_NUM = Q.Q_NUM
+	            WHERE A.QA_NUM IS NULL  
+           	 <choose>
+	                <when test="select == 0">
+	                AND Q_TITLE LIKE '%' || #{keyword} || '%'
+	               	</when>
+					<when test="select == 1">
+					AND ID LIKE '%' || #{keyword} || '%'
+					</when>
+					<otherwise>
+					AND 1 = 2
+					</otherwise>
+				</choose>
+                ORDER BY Q_NUM
+             ) B 
+         )
+	</select>
+	
+	<!-- 답변없는 질문 동적검색 -->
+	<select id="adminsearchnoAnswer" parameterType="map" resultType="adminqnaVO">
+	SELECT *
+	FROM (SELECT ROWNUM R_NUM, B.*
+       FROM (	SELECT Q.Q_NUM, Q.CUSTID, Q.PRODUCT_NAME, Q.Q_TITLE, Q.Q_CONTENTS, Q.ID, Q.Q_DATE, Q.Q_HITS, Q.Q_PWD
+        		FROM QNA_ANSWER A RIGHT OUTER JOIN QNA Q
+	            ON A.Q_NUM = Q.Q_NUM
+	            WHERE A.QA_NUM IS NULL  
+                <choose>
+	                <when test="select == 0">
+	              	 AND Q_TITLE LIKE '%' || #{keyword} || '%'
+	               	</when>
+					<when test="select == 1">
+					AND ID LIKE '%' || #{keyword} || '%'
+					</when>
+					<otherwise>
+					AND 1 = 2
+					</otherwise>
+				</choose>
+               	ORDER BY Q_NUM
+             ) B 
+         )
+	WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<!-- 리뷰 갯수 -->
+	<select id="admin_totalCountReview" resultType="int">
+		SELECT COUNT(*)
+		FROM REVIEW
+	</select>
+	
+	<!-- 페이지에 해당하는 리뷰 리스트 -->
+	<select id="admin_reviewList" parameterType="map" resultType="adminReviewVO">
+		SELECT *
+	FROM (SELECT ROWNUM R_NUM, B.*
+	        FROM (SELECT *
+	                FROM REVIEW
+	                ORDER BY B_NUM DESC
+	             ) B 
+	         )
+	WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<!-- 번호에 해당하는 리뷰 조회 -->
+	<select id="adminselectReview" parameterType="int" resultType="adminReviewVO">
+		SELECT * FROM REVIEW
+		WHERE B_NUM = #{bNum}
+	</select>
+	
+	<!-- 번호에 해당하는 댓글 조회 -->
+	<select id="adminselectComment" parameterType="int" resultType="adminCommentVO">
+		SELECT * FROM REVIEW_CMT
+		WHERE B_NUM = #{bNum}
+		ORDER BY C_NUM
+	</select>
+	
+	<!-- 답변작성 -->
+	<insert id="admininsertComment" parameterType="adminCommentVO">
+		INSERT INTO REVIEW_CMT (C_NUM,ID,CONTENT,B_NUM,C_DATE) 
+		VALUES (C_NUM.NEXTVAL, #{id}, #{content}, #{bNum}, SYSDATE)
+	</insert>
+	
+	<!-- 댓글번호 받아서 삭제 -->
+	<delete id="admindeleteComment" parameterType="int">
+		DELETE FROM REVIEW_CMT
+		WHERE C_NUM = #{cNum}
+	</delete>
+	
+	<!-- 키워드에 해당하는 리뷰수 조회-->
+	<select id="adminSearchCountReview"  parameterType="map" resultType="int">
+	SELECT COUNT(*)
+	FROM (SELECT ROWNUM R_NUM, B.*
+        FROM (	SELECT *
+                FROM REVIEW
+               <choose>
+	                <when test="select == 0">
+	                WHERE PRODUCT_NAME LIKE '%' || UPPER(#{keyword}) || '%'
+	               	</when>
+					<when test="select == 1">
+					WHERE ID LIKE '%' || #{keyword} || '%'
+					</when>
+					<otherwise>
+					WHERE 1 = 2
+					</otherwise>
+				</choose>
+                ORDER BY B_NUM DESC
+             ) B 
+         )
+	</select>
+	
+	<!-- 리뷰동적검색 -->
+	<select id="admingetSearchReview" parameterType="map" resultType="adminReviewVO">
+	SELECT *
+	FROM (SELECT ROWNUM R_NUM, B.*
+        FROM (	SELECT *
+                FROM REVIEW
+                <choose>
+	                <when test="select == 0">
+	                WHERE PRODUCT_NAME LIKE '%' || UPPER(#{keyword}) || '%'
+	               	</when>
+					<when test="select == 1">
+					WHERE ID LIKE '%' || #{keyword} || '%'
+					</when>
+					<otherwise>
+					WHERE 1 = 2
+					</otherwise>
+				</choose>
+                 ORDER BY B_NUM DESC
+             ) B 
+         )
+	WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<!-- 조회수추가(문의글)-->
+	<update id="adminupdateQnaHits" parameterType="int">
+		 UPDATE QNA
+		 SET Q_HITS = Q_HITS + 1 
+		 WHERE Q_NUM = ${qNum}
+	</update>	
+	
+	<!-- 조회수추가(리뷰)-->
+	<update id="adminupdateReviewHits" parameterType="int">
+		 UPDATE REVIEW
+		 SET HITS = HITS + 1 
+		 WHERE B_NUM = ${bNum}
+	</update>
+	
+	<!-- 주문수(주문번호 중복값 제거) -->
+	<select id="adminSelectOrderCnt" resultType="int">
+		SELECT COUNT(DISTINCT O_NUM) FROM ORDER_LIST
+	</select>
+	
+	<!-- 페이지에 해당하는 주문 조회 -->
+	<select id="adminSelectOrderList" parameterType="map" resultType="adminorderVO">
+		SELECT *
+		FROM (SELECT ROWNUM R_NUM, B.*
+	    FROM (SELECT * FROM (
+	          SELECT O_NUM, ID, O_DATE, O_ADDR, PAYMENT, MEMO, O_PHONE, O_PAYMENT, 
+	          ROW_NUMBER() OVER (PARTITION BY O_NUM ORDER BY PRICE DESC) AS RankNo
+	          FROM ORDER_LIST
+		          ) T WHERE RankNo = 1
+				ORDER BY O_NUM DESC
+		        ) B 
+		    )   
+		WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<!-- 주문상세보기 리스트 -->
+	<select id="adminDetailOrderList" parameterType="adminorderVO" resultType="adminorderVO">
+		SELECT * FROM ORDER_LIST
+		WHERE O_NUM = #{o_num}
+	</select>
+	
+	<!-- 키워드에 해당하는 주문수(주문번호 중복값 제거) -->
+	<select id="adminSearchCountOrderfinal"  parameterType="map" resultType="int">
+		SELECT COUNT(DISTINCT O_NUM)
+			FROM (SELECT ROWNUM R_NUM, B.*
+       	 		FROM (	SELECT * FROM ORDER_LIST
+               <choose>
+	                <when test="select == 0">
+	                WHERE O_NUM = #{keyword}
+	               	</when>
+					<when test="select == 1">
+					WHERE ID = #{keyword} 
+					</when>
+					<otherwise>
+					WHERE 1 = 2
+					</otherwise>
+				</choose>
+             ) B 
+         )
+	</select>
+	
+	<!-- 키워드 및 페이지에 해당하는 주문 조회 -->
+	<select id="adminSelectOrderListfinal" parameterType="map" resultType="adminorderVO">
+		SELECT *
+		FROM (SELECT ROWNUM R_NUM, B.*
+	        FROM (	SELECT * FROM (
+		        	SELECT O_NUM, ID, O_DATE, O_ADDR, PAYMENT, MEMO, O_PHONE, O_PAYMENT, 
+	         		ROW_NUMBER() OVER (PARTITION BY O_NUM ORDER BY PRICE DESC) AS RankNo
+		         	FROM ORDER_LIST
+			          ) T WHERE RankNo = 1
+	                <choose>
+		                <when test="select == 0">
+		               AND O_NUM = #{keyword}
+		               	</when>
+						<when test="select == 1">
+						AND ID = #{keyword} 
+						</when>
+						<otherwise>
+						AND 1 = 2
+						</otherwise>
+					</choose>
+	                ORDER BY O_NUM DESC
+	             ) B 
+	         )
+		WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select>
+	
+</mapper>

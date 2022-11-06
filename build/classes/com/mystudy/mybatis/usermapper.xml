@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="customer">
+
+	<!-- 회원가입 정보 추가-->
+	<insert id="join" parameterType="cVO">
+		INSERT INTO CUSTOMER
+			(CUSTID, NAME, ID, PWD, ADDR, PHONE, EMAIL)
+		VALUES (CUST_SEQ.NEXTVAL, #{name}, #{id}, #{pwd}, #{addr}, #{phone}, #{email})
+	</insert>
+	
+	<!-- 로그인 -->
+	<select id="login" parameterType="map" resultType="string">
+		SELECT ID
+		  FROM CUSTOMER
+		 WHERE ID = #{id} AND PWD = #{pwd}
+	</select>
+	
+	
+	<!-- 회원정보 수정 -->
+	<update id="update" parameterType="cVO">
+		UPDATE CUSTOMER
+			SET NAME = #{name},
+				PWD = #{pwd},
+				ADDR = #{addr},
+				PHONE = #{phone},
+				EMAIL = #{email}
+		WHERE ID = #{id}
+	</update>
+	
+	<!-- 회원정보 삭제 -->
+	<delete id="delete" parameterType="string">
+		DELETE FROM CUSTOMER
+		WHERE ID = #{id}
+	</delete>
+	
+	
+	<!-- 회원정보 전체 조회 -->
+	<select id="all" parameterType="string" resultType="cVO">
+		SELECT NAME, ID, PWD, ADDR, PHONE, EMAIL
+		FROM CUSTOMER
+		WHERE ID = #{id}
+	</select>
+	
+	<!-- 아이디 중복 값 확인 -->
+	<select id="idcheck" parameterType="string" resultType="string">
+		SELECT ID FROM CUSTOMER
+		WHERE ID = #{id}
+	</select>
+	
+	<!-- 비밀번호 중복 값 확인 -->
+	<select id="pwdcheck" parameterType="string" resultType="string">
+		SELECT PWD FROM CUSTOMER
+		WHERE PWD = #{pwd}
+	</select>
+	
+	<!-- 비밀번호 일치여부 확인 -->
+	<select id="pwd" parameterType="map" resultType="string">
+		SELECT PWD
+		  FROM CUSTOMER
+		 WHERE ID = #{id}
+	</select>
+	
+	<select id="idFind" parameterType="map" resultType="String">
+		SELECT ID FROM CUSTOMER
+		WHERE NAME = #{name} AND PHONE = #{phone}
+	</select>
+	
+	<select id="pwFind" parameterType="map" resultType="String">
+		SELECT PWD FROM CUSTOMER
+		WHERE NAME = #{name} AND PHONE = #{phone} AND ID = #{id}
+	</select>
+	
+</mapper>
+
+
+
+
+
+

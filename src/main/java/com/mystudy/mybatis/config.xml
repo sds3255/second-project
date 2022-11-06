@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+  
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL"/>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
+
+	<typeAliases>
+		<typeAlias type="com.mystudy.Project_shop.vo.qnaVO" alias="qnaVO" />
+		<typeAlias type="com.mystudy.Project_shop.vo.reviewVO" alias="reVO" />
+		<typeAlias type="com.mystudy.Project_shop.vo.productVO" alias="proVO" />
+		<typeAlias type="com.mystudy.Project_shop.vo.reviewCommentsVO" alias="rcVO" />
+		<typeAlias type="com.mystudy.Project_shop.vo.customerVO" alias="cVO" />
+		<typeAlias  type="com.mystudy.Project_shop.vo.ProductPriceVO" alias="productVO"/>
+		<typeAlias type="com.mystudy.Project_shop.vo.CartVO" alias="cart"/>
+		<typeAlias type="com.mystudy.Project_shop.vo.OrderListVO" alias="order_list"/>
+	</typeAliases>
+	
+ 
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="oracle.jdbc.OracleDriver"/>
+        <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+        <property name="username" value="mall"/>
+        <property name="password" value="1234"/>
+      </dataSource>
+    </environment>
+  </environments>
+  
+  <mappers>
+    <mapper resource="com/mystudy/mybatis/mapper.xml"/>
+    <mapper resource="com/mystudy/mybatis/usermapper.xml"/>
+  </mappers>
+  
+</configuration>
