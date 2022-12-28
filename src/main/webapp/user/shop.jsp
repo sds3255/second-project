@@ -10,14 +10,7 @@
 	if ("${delok}" == 1) {
 		alert("정상적으로 탈퇴 처리 되었습니다.\n이용해주셔서 감사합니다.");
 	}
-/* 	function main() {
-		if("${id}" == '' || "${id}" == null){
-			location.href = "shop.jsp";
-			return;
-		} else {
-			location.href = "shoplogin.jsp?id=${id}";
-		}
-	} */
+
 	function shopclick() {
 		if("${id}" == ""){
 			location.href = "../user/shop.jsp";

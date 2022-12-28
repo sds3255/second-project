@@ -232,29 +232,12 @@ footer {
 	<script>
 function page(cPage,category) {
 	var frm = document.getElementById('nextpage');
-	console.log(cPage);
-	console.log("category:"+category);
 	frm.action="ccontroller?func=all&category="+category+"&cPage="+cPage;
 	frm.submit();
 }
-/* function all_go(category) {
-	var frm = document.getElementById('main');
-	console.log(frm);
-	console.log(category);
-	if (category == "all") {
-		console.log(category);
-		frm.action = "ccontroller?func=all&category=" + category;
-		frm.submit();
-	} else if (category == "PC001" || category == "AC002") {
-		console.log(category);
-		frm.action = "ccontroller?func=all&category=" + category;
-		frm.submit();
-	}
-} */
 	function cart_go(){
 		var frm = document.getElementById('cart');
 		var id = document.getElementsByClassName("id");
-		console.log("id:${id}");
  		if("${id}"=='undefined'||"${id}"==""){
 			alert("장바구니는 로그인 후  이용가능합니다.");
 			location.href="/Project_shop/user/login.jsp";			
@@ -268,8 +251,6 @@ function page(cPage,category) {
 		var frm = document.getElementById('cart');
 		var id = document.getElementsByClassName("id");
 		var model = $("#model option:selected").val();
-		console.log("id:${id}");
-
 		if (model == "") {
 			alert("기종을 선택하세요.");
 			return;

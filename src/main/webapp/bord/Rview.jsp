@@ -9,32 +9,20 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
 	request.setCharacterEncoding("utf-8");
-	//파라미터 값 추출
 	String bNum = request.getParameter("bNum");
-	System.out.println("bNum : ??? :" + bNum);
  	int bNum1 = Integer.parseInt(request.getParameter("bNum"));
 	String cPage = request.getParameter("cPage");
-	
-	System.out.println("bNum : " + bNum);
-	System.out.println("cPage : " + cPage);
-	
-	//조회수 1 증가
 	int up = ShopDAO.rUpHit(bNum1);
 	
 	reviewVO vo = ShopDAO.selectOneRev(bNum1);
-	 System.out.println("bNum : " + bNum);
-	 System.out.println("vo : " + vo);
-	 
 	session.setAttribute("vo", vo);
 	session.setAttribute("bNum", bNum);
 	session.setAttribute("cPage", cPage);
-	//session.getAttribute("id");	
 	
 	List<reviewCommentsVO> cmtList = ShopDAO.cmtList(bNum1);
 	
 	pageContext.setAttribute("List", cmtList); 
 	pageContext.setAttribute("id", request.getParameter("id")); 
-	
 %>
 <!DOCTYPE html>
 <html>
@@ -48,17 +36,6 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 <title>QNA VIEW</title>
 <script>
-/* 	
-	function review_go() {
-		location.href = "review.jsp?bNum=${bNum}&cPage=${cPage}";
-	}
-	function qna_modify() {
-		location.href = "controller?type=rModify&bNum=${bNum}&cPage=${cPage}";
-	}
-	function qna_delete() {
-		location.href = "controller?type=rDelete&bNum=${bNum}&cPage=${cPage}";
-	} */
- 
 	function cmtInsertGo() {
 		let firstForm = document.forms[0];
 		if (document.getElementById('cmtCnt').value.trim() == ""){

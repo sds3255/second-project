@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 <%
 	request.setCharacterEncoding("UTF-8");
-
 	session.getAttribute("vo");
 	String cPage = request.getParameter("cPage");
 	pageContext.setAttribute("cPage", cPage);
@@ -20,8 +19,6 @@ function qnaView(){
 	let pwd2 = document.getElementById('pwd2').value;
 	alert("firstForm.elements.length : " + firstForm.elements.length);
 	for (let i = 0; i < firstForm.elements.length; i++){
-		console.log(firstForm.elements[i]);
-		console.log(firstForm.elements[i].value);
 		if (firstForm.elements[i].value.trim() == "") {
 			alert(firstForm.elements[i].title + "입력을 하세요");
 			firstForm.elements[i].value= "";

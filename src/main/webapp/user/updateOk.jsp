@@ -4,7 +4,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
 	String id = request.getParameter("id");
-	
 	session.setAttribute("id", id);
 %>
 

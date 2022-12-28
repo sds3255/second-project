@@ -374,7 +374,6 @@ table {
 	function reorder() {
 		var onum =$("#detail").val();
 		var id = $("#id").val();
-		console.log(onum);
 		location.replace("ccontroller?func=detail&funcc=reorder&onum="+onum+"&id=${id }");
 	}
 	function revieww() {
@@ -408,12 +407,8 @@ table {
 	
 	//페이지넘기기 기능
 	function back(pageNo) {
-		console.log("back()시작");
 		var frm = document.getElementById('frm');
-		console.log(pageNo);
-		console.log(frm);
 		frm.action = "ccontroller?func=payment&funcc=detail&cPage="+pageNo + "&onum=${pivo.oNum}" ;
-		console.log(pageNo);
 		frm.submit();
 	}	
 	//상품이름 클릭
@@ -424,25 +419,19 @@ table {
 	}
 	function all_go(category) {
 		var frm = document.getElementById('main');
-		console.log(frm);
-		console.log(category);
 		if (category == "all") {
-			console.log(category);
 			frm.action = "ccontroller?func=all&category=" + category;
 			frm.submit();
 		} else if (category == "PC001") {
-			console.log(category);
 			frm.action = "ccontroller?func=all&category=" + category;
 			frm.submit();
 		}else if (category == "AC002") {
-			console.log(category);
 			frm.action = "ccontroller?func=all&category=" + category;
 			frm.submit();
 		}
 	}
 	function cart_go() {
 		var frm = document.getElementById('main');
-		console.log(frm);
 		frm.action = "ccontroller?func=cart&funcc=cartin";
 		frm.submit();
 	}

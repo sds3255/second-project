@@ -19,13 +19,11 @@
 		let pwd = document.getElementById("pwd").value;
 		let pwdok = document.getElementById("pwdok").value;
 		let idcheck = "${idok }";
-		console.log("idcheck : " + idcheck);
 		alert("firstForm.elements.length : " + firstForm.elements.length);
 		
 		for (let i = 0; i < firstForm.elements.length; i++) {
 			if (firstForm.elements[i].value.trim() == "") {
 				alert(firstForm.elements[i].title + "을(를) 입력하세요");
-				console.log("firstForm.elements[i] : " + firstForm.elements[i]);
 				firstForm.elements[i].value = "";
 				firstForm.elements[i].focus();
 				return;
@@ -60,10 +58,6 @@
 			location.href = "../user/shoplogin.jsp?id=${id}";
 		}
 	}
-/* 	if("<c:out value='${findid}'/>" !=''){
-		let msg = "<c:out value='${msg}'/>";
-		alert(msg);
-	} */
 </script>
 
 <style>

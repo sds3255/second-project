@@ -281,20 +281,13 @@ td:nth-child(5) a {
 		});
 		//페이지넘기기 기능
 		function back(pageNo) {
-			console.log("back()시작");
 			var frm = document.forms.frm3;
-			console.log(pageNo);
-			console.log(frm);
 			frm.action = "ccontroller?func=cart&funcc=cartin&cPage="+pageNo;
-			console.log(pageNo);
 			frm.submit();
 		}	
 
 		//수정클릭
 		function update(frm,cPage) {
-/* 			let frm = document.forms.frm3;
-			var cnum = document.form3.elements['cnum'].value
-			var count =  document.form3.count.val(); */
 			frm.action = "ccontroller?func=cart&funcc=update&cPage="+cPage+"&id=${id}";
 			alert("수량이 변경되었습니다.");
 			frm.submit();
@@ -324,25 +317,19 @@ td:nth-child(5) a {
 		}
 		//상품이름클릭
 		function nameclick(productnum) {
-
 			let frm = document.forms.frm3;
 			frm.action = "ccontroller?func=content&id=${id}&productNum="+productnum;
 			frm.submit();
 		}
 		function all_go(category) {
 			var frm = document.getElementById('main');
-			console.log(frm);
-			console.log(category);
 			if (category == "all") {
-				console.log(category);
 				frm.action = "ccontroller?func=all&category=" + category;
 				frm.submit();
 			} else if (category == "PC001") {
-				console.log(category);
 				frm.action = "ccontroller?func=all&category=" + category;
 				frm.submit();
 			}else if (category == "AC002") {
-				console.log(category);
 				frm.action = "ccontroller?func=all&category=" + category;
 				frm.submit();
 			}
@@ -350,7 +337,6 @@ td:nth-child(5) a {
 		//네비게이션바에서 cart누를시
 		function cart_go(){
 			var frm = document.getElementById('main');
-			console.log(frm);
 			frm.action = "ccontroller?func=cart&funcc=cartin";
 			frm.submit();
 		}

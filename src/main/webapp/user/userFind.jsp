@@ -109,18 +109,6 @@
   </div>
 </div>
 </body>
-<!-- <script type="text/javascript">
-	let msg = "<c:out value='${msg}'/>";
-	let msg1 = "<c:out value='${msg1}'/>";
-	let findid = "<c:out value='${findid}'/>";
-	if(findid != null){
-		alert(msg);
-		location.href = "join.jsp";
-	} else {	
-		alert(msg1);
-		location.href = "login.jsp";
-	}
-</script> -->
 
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <footer>

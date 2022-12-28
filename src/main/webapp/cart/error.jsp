@@ -11,7 +11,6 @@
 <script>
 
 	alert("잘못된 접근입니다. ");
-	console.log("cnum:"+cpage);
 	location.href="shop.jsp";
 
 

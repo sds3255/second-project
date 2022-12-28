@@ -16,7 +16,6 @@
 <script>
 	if(confirm("장바구니에 담겼습니다. 장바구니로 이동하시겠습니까?")==true){
 		var id =  document.getElementById('id').value;
-		console.log(id);
 		location.href ="ccontroller?func=cart&funcc=cartin&id="+id;
 	} else{
 		history.go(-1);

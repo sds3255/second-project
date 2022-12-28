@@ -3,9 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
-/* 	String id = request.getParameter("id");
-	
-	session.setAttribute("id", id); */
 	session.getAttribute("id");
 %>
 <!DOCTYPE html>
@@ -30,8 +27,6 @@
 			return;
 		} 
 		if (form.pwd.value != "${result}") {
-			console.log("pwd : " + form.pwd.value);
-			console.log("pwd : " + '${result}');
 			alert ("비밀번호가 일치하지 않습니다.");
 			return;
 		} else {

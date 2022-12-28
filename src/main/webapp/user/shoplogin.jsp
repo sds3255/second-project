@@ -1,12 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%
-	String id = request.getParameter("id");
-
-	pageContext.setAttribute("id", id);
-%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%
+	String id = request.getParameter("id");
+	pageContext.setAttribute("id", id);
+%>
 <!DOCTYPE html>
 <html>
 <head>

@@ -5,24 +5,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%
-request.setCharacterEncoding("utf-8");
-//파라미터 값 추출
-int qNum = Integer.parseInt(request.getParameter("qNum"));
-String cPage = request.getParameter("cPage");
-
-System.out.println("qNum : " + qNum);
-System.out.println("cPage : " + cPage);
-
-//조회수 1 증가
-int up = ShopDAO.upHit(qNum);
-
-qnaVO vo = ShopDAO.selectOne(qNum);
-System.out.println("qNum : " + qNum);
-System.out.println("vo : " + vo);
-
-session.setAttribute("vo", vo);
-session.setAttribute("qNum", qNum);
-session.setAttribute("cPage", cPage);
+	request.setCharacterEncoding("utf-8");
+	//파라미터 값 추출
+	int qNum = Integer.parseInt(request.getParameter("qNum"));
+	String cPage = request.getParameter("cPage");
+	int up = ShopDAO.upHit(qNum);
+	qnaVO vo = ShopDAO.selectOne(qNum);
+	session.setAttribute("vo", vo);
+	session.setAttribute("qNum", qNum);
+	session.setAttribute("cPage", cPage);
 %>
 <!DOCTYPE html>
 <html>

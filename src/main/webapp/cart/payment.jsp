@@ -408,25 +408,19 @@ thead {
 		}
 		function all_go(category) {
 			var frm = document.getElementById('main');
-			console.log(frm);
-			console.log(category);
 			if (category == "all") {
-				console.log(category);
 				frm.action = "ccontroller?func=all&category=" + category;
 				frm.submit();
 			} else if (category == "PC001") {
-				console.log(category);
 				frm.action = "ccontroller?func=all&category=" + category;
 				frm.submit();
 			} else if (category == "AC002") {
-				console.log(category);
 				frm.action = "ccontroller?func=all&category=" + category;
 				frm.submit();
 			}
 		}
 		function cart_go() {
 			var frm = document.getElementById('main');
-			console.log(frm);
 			frm.action = "ccontroller?func=cart&funcc=cartin";
 			frm.submit();
 		}

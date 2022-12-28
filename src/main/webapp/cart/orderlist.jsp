@@ -249,12 +249,8 @@ td:nth-child(3) a{  font-size: medium;}
 	
 	//페이지넘기기 기능
 	function back(pageNo) {
-		console.log("back()시작");
 		var frm = document.getElementById('frm');
-		console.log(pageNo);
-		console.log(frm);
 		frm.action = "ccontroller?func=payment&funcc=cart&cPage="+pageNo;
-		console.log(pageNo);
 		frm.submit();
 	}	
 	//상품이름 클릭
@@ -265,25 +261,19 @@ td:nth-child(3) a{  font-size: medium;}
 	}
 	function all_go(category) {
 		var frm = document.getElementById('main');
-		console.log(frm);
-		console.log(category);
 		if (category == "all") {
-			console.log(category);
 			frm.action = "ccontroller?func=all&category=" + category;
 			frm.submit();
 		} else if (category == "PC001") {
-			console.log(category);
 			frm.action = "ccontroller?func=all&category=" + category;
 			frm.submit();
 		} else if (category == "AC002") {
-			console.log(category);
 			frm.action = "ccontroller?func=all&category=" + category;
 			frm.submit();
 		}
 	}
 	function cart_go() {
 		var frm = document.getElementById('main');
-		console.log(frm);
 		frm.action = "ccontroller?func=cart&funcc=cartin";
 		frm.submit();
 	}
@@ -295,47 +285,6 @@ td:nth-child(3) a{  font-size: medium;}
 			location.href = "../user/shop.jsp";
 		}
 	}
- 	/* //상세보기 클릭시 같은화면 아래쪽에 정보 표시 기능
- 	$().ready(function(){
-		$("#detail").click(getDetail);
-	});
-	function getDetail(){
-	//	var form = $("#frm").serialize();
-
-		alert(">>getDetail실행");
-		$.ajax({
-			url:"controller",
-			type:"get",
-
-			dataType : "xml",
-			success: function (data) {
-				alert("Ajax처리 성공 : "+data);
-				console.log(data); 
-						
-				let htmlTag = "";
-				$(data).find("member").each(function(){
-					console.log($(this).find("oNum").text()); 
-					htmlTag += "<tr>";
-					htmlTag += "<td>"+$(this).find("oNum").text()+"</td>";
-					htmlTag += "<td>"+$(this).find("ProductNum").text()+"</td>";
-					htmlTag += "<td>"+$(this).find("ProductName").text()+"</td>";
-					htmlTag += "<td>"+$(this).find("SmallImage").text()+"</td>";
-					htmlTag += "<td>"+$(this).find("cCount").text()+"</td>";
-					htmlTag += "<td>"+$(this).find("Price").text()+"</td>";
-					htmlTag += "<td>"+$(this).find("Saleprice").text()+"</td>";
-					htmlTag += "</tr>";
-				});
-				$("#tbody").html(htmlTag);
-				
-			},
-			error : function(jqXHR, textStatus, errorTHhrown,data) {
-				
-				alert("Ajax 처리 실패 \n  jqXHR:" + jqXHR.readyState + "\n"
-						+ "textStatus: " + textStatus + "\n" + "errorTHhrown:"
-						+ errorTHhrown+"data:"+data); 
-			}
-		});		
-	}  */
 </script>
 <br><br><br><br><br><br><br><br><br><br><hr>
 <footer>

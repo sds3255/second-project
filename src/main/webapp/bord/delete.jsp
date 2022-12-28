@@ -6,12 +6,7 @@ request.setCharacterEncoding("UTF-8");
 	String cPage = request.getParameter("cPage");
 	session.setAttribute("cPage", cPage);
 	session.setAttribute("qNum", qNum);
-	session.getAttribute("vo");
-	
-	System.out.println(cPage);
-	System.out.println(qNum);
-	
-	
+	session.getAttribute("vo");	
 %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -24,17 +19,10 @@ request.setCharacterEncoding("UTF-8");
 <script>
 	function qnaModify() {
 		let pwd = document.getElementById('pwd').value;
-/* 		location.href = "controller?type=qnaModify";
-		let pwdcheck = "${pwdout}";
-		if(pwdcheck == null){
-			alert("비밀번호가 일치하지 않습니다. \n 다시 입력해주세요!!");
-			return;
-		} */
+
 		let firstForm = document.forms[0];
 		alert("firstForm.elements.length : " + firstForm.elements.length);
 		for (let i = 0; i < firstForm.elements.length; i++){
-			console.log(firstForm.elements[i]);
-			console.log(firstForm.elements[i].value);
 			if (firstForm.elements[i].value.trim() == "") {
 				alert(firstForm.elements[i].title + "입력을 하세요");
 				firstForm.elements[i].value= "";

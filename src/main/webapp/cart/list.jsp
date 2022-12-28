@@ -202,35 +202,27 @@ form {
 	<script>
 	function page(cPage,category) {
 		var frm = document.getElementById('nextpage');
-		console.log(cPage);
-		console.log("category:"+category);
 		frm.action="ccontroller?func=all&category="+category+"&cPage="+cPage;
 		frm.submit();
 	}
 	function all_go(category) {
 		var frm = document.getElementById('main');
-		console.log(frm);
-		console.log(category);
 		if (category == "all") {
-			console.log(category);
 			frm.action = "ccontroller?func=all&category=" + category;
 			frm.submit();
 		} else if (category == "PC001" || category == "AC002") {
-			console.log(category);
 			frm.action = "ccontroller?func=all&category=" + category;
 			frm.submit();
 		}
 	}
 	function content_go(productNum) {
 		var frm = document.getElementById('main');
-		console.log(productNum);
 		frm.action = "ccontroller?func=content&productNum=";
 		frm.submit();
 	}
 
 	function cart_go(){
 		var frm = document.getElementById('main');
-		console.log(frm);
 		frm.action = "ccontroller?func=cart&funcc=cartin";
 		frm.submit();
 	}

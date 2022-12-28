@@ -11,7 +11,6 @@
 
 <%
 	request.setCharacterEncoding("utf-8");
-
 	session.setAttribute("keyword", request.getParameter("keyword"));
 	session.setAttribute("idx", request.getParameter("idx"));
 	session.setAttribute("id", request.getParameter("id"));
@@ -32,8 +31,6 @@
 		let firstForm = document.forms[0];
 		alert("firstForm.elements.length : " + firstForm.elements.length);
 		for (let i = 0; i < firstForm.elements.length-4; i++){
-			console.log(firstForm.elements[i]);
-			console.log(firstForm.elements[i].value);
 			if (firstForm.elements[i].value.trim() == "") {
 				alert(firstForm.elements[i].title + "를 입력 하세요");
 				firstForm.elements[i].value= "";

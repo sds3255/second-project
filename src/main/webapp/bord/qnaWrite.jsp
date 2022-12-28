@@ -3,8 +3,8 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
-String id = request.getParameter("id");
-pageContext.setAttribute("id", id);
+	String id = request.getParameter("id");
+	pageContext.setAttribute("id", id);
 %>
 <!DOCTYPE html>
 <html>
@@ -27,8 +27,6 @@ pageContext.setAttribute("id", id);
 		let pwd2 = document.getElementById('pwd2').value;
 		alert("firstForm.elements.length : " + firstForm.elements.length);
 		for (let i = 0; i < firstForm.elements.length; i++) {
-			console.log(firstForm.elements[i]);
-			console.log(firstForm.elements[i].value);
 			if (firstForm.elements[i].value.trim() == "") {
 				alert(firstForm.elements[i].title + "입력을 하세요");
 				firstForm.elements[i].value = "";

@@ -17,9 +17,7 @@
 			alert("아이디를 입력하지 않았습니다.");
 			return false;
 		}
-		else {
-			
-		}
+		else {}
 	}
 
 </script>

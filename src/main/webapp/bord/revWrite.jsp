@@ -10,13 +10,8 @@
 	pageContext.setAttribute("id", id);
 	request.getParameter("cPage");
 	request.getParameter("bNum");
-	
-	//주문한 내역 가져오기
 	List<productVO> Plist = ShopDAO.PList(id);
-	
-	System.out.println("Plist : " + Plist);
 	session.setAttribute("Plist", Plist);
-	
 %>
 <!DOCTYPE html>
 <html>
@@ -34,8 +29,6 @@ function sendData(){
 	let firstForm = document.forms[0];
 	alert("firstForm.elements.length : " + firstForm.elements.length);
 	for (let i = 0; i < firstForm.elements.length; i++){
-		console.log(firstForm.elements[i]);
-		console.log(firstForm.elements[i].value);
 		if (firstForm.elements[i].value.trim() == "") {
 			if(i == 3 || i == 6) continue; //첨부파일은 제외
 			alert(firstForm.elements[i].title + i + " 입력 하세요");

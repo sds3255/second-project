@@ -11,48 +11,23 @@
 <%
 	Paging p = new Paging();
 	
-	//전체 게시물 수량 구하기
 	p.setTotalRecord(ShopDAO.RgetTotalCount());
 	p.setTotalPage();
-	System.out.println(">전체 게시글 수 확인 : " + p.getTotalRecord());
-	System.out.println(">전체 페이지 수 확인 : " + p.getTotalPage());
-	
-	//현재페이지 구하기
 	String cPage = request.getParameter("cPage");
 	if(cPage != null){
 		p.setNowPage(Integer.parseInt(cPage));
 	}
-	System.out.println("> cPage : " + cPage);
-	System.out.println("> paging nowPage : " + p.getNowPage());
-	
-	// 3. 현재 페이지 표시할 게시글 시작번호(begin) 끝번호(end) 구하기
 	p.setEnd(p.getNowPage() * p.getNumPerPage());
 	p.setBegin(p.getEnd() - p.getNumPerPage() + 1);
 	
-	// 3-1. 끝 번호가 건수보다 많으면 -> 끝번호 = 건수 로 처리
 	if (p.getEnd() > p.getTotalRecord()) p.setEnd(p.getTotalRecord());
-	
-	System.out.println(">> 시작번호(begin) : " + p.getBegin());
-	System.out.println(">> 끝번호(end) : " + p.getEnd());
-	
-	// ------블록(block) 계산하기 ---------------------------
-		// 4. 블록의 시작 페이지, 끝 페이지 구하기 (우리가 쓸 수 있는 것은 현제페이지 번호)
 	int nowPage = p.getNowPage();
 	int beginPage = (nowPage - 1) / p.getNumPerBlock() *p.getNumPerBlock() + 1;
 	p.setBeginPage(beginPage);
 	p.setEndPage(beginPage + p.getNumPerBlock() -1);
 	
-	// 끝페이지(endPage)가 전체 페이지 수 (totalPage)보다 크면 -> 끝페이지 = 전체페이지수
 	if (p.getEndPage() > p.getTotalPage()) p.setEndPage(p.getTotalPage());
-	
-	System.out.println("> beginPage : " + p.getBeginPage());
-	System.out.println("> endPage : " + p.getEndPage());
-	
 	List<reviewVO> list = ShopDAO.Rgetlist(p.getBegin(), p.getEnd());
-	
-	
-	System.out.println("list : " + list);
-	System.out.println("id : " + request.getParameter("id"));
 
 	pageContext.setAttribute("id", request.getParameter("id"));
 	pageContext.setAttribute("list", list);
@@ -81,8 +56,6 @@
 		let firstForm = document.forms[0];
 		alert("firstForm.elements.length : " + firstForm.elements.length);
 		for (let i = 0; i < firstForm.elements.length-4; i++){
-			console.log(firstForm.elements[i]);
-			console.log(firstForm.elements[i].value);
 			if (firstForm.elements[i].value.trim() == "") {
 				alert(firstForm.elements[i].title + "를 입력 하세요");
 				firstForm.elements[i].value= "";
