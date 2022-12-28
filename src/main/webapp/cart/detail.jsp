@@ -349,14 +349,14 @@ table {
  				<div id="btn2">
 					<input type="button" class="btn btn-outline-dark" value="재구매" onclick="reorder()">
 					<input type="hidden" name="onum" value="<%-- ${dvo.oNum } --%>">
-				<span class="btn3">
-					<input type="button" class="btn btn-outline-dark" value="결제취소(환불요청)" onclick="refund(this.form)">
-					<input type="hidden" name="cPage" value="${pvo.nowPage }">
-				</span>
-				<span>
-					<input type="button" class="btn btn-outline-dark" name="cartadd" value="장바구니담기" onclick="cartAdd(this.form)">
-				</span>
-			</div> 
+					<span class="btn3">
+						<input type="button" class="btn btn-outline-dark" value="결제취소(환불요청)" onclick="refund(this.form)">
+						<input type="hidden" name="cPage" value="${pvo.nowPage }">
+					</span>
+					<span>
+						<input type="button" class="btn btn-outline-dark" name="cartadd" value="장바구니담기" onclick="cartAdd(this.form)">
+					</span>
+				</div> 
 		</form>
 	</div>
 </body>

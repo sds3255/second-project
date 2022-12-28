@@ -19,7 +19,6 @@ public class CartAddCommand implements Command {
 		String count  = request.getParameter("amount");
 		String model  = request.getParameter("model");
 		if(id=="") {
-			System.out.println("null들어옴");
 			request.setAttribute("id", id);
 			request.setAttribute("model", model);
 			return "/cart/product_content.jsp?productNum="+productnum;

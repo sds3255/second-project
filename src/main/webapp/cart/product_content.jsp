@@ -211,17 +211,15 @@ footer {
 							</td>
 						</tr>
 						<tr>
-							<td><br>
-							<br>
-							<br>
-							<br> <input class="btn btn-dark" type="button"
-								value="장바구니 담기" onclick="add(${vo.productNum})"> <input
-								type="hidden" name="id" value="${id}"></td>
-							<td><br>
-							<br>
-							<br>
-							<br> <input class="btn btn-dark" type="button"
-								value="장바구니 보기" onclick="cart_go()"></td>
+							<td>
+								<br><br><br><br> 
+								<input class="btn btn-dark" type="button" value="장바구니 담기" onclick="add(${vo.productNum})"> 
+								<input type="hidden" name="id" value="${id}">
+							</td>
+							<td>
+								<br><br><br><br> 
+								<input class="btn btn-dark" type="button" value="장바구니 보기" onclick="cart_go()">
+							</td>
 						</tr>
 					</tfoot>
 				</table>
@@ -259,10 +257,10 @@ function page(cPage,category) {
 			alert("장바구니는 로그인 후  이용가능합니다.");
 			location.href="/Project_shop/user/login.jsp";			
 		}else{ 
-		frm.action = "ccontroller?func=cartadd&productNum=" + productNum+"&model="+model + "&id=${id}";
-	frm.submit();
+			frm.action = "ccontroller?func=cartadd&productNum=" + productNum+"&model="+model + "&id=${id}";
+			frm.submit();
 		
-	}
+		}
 	}
 	var img = document.getElementsByClassName('click_img');
 	for(var x=0; x<img.length; x++){
