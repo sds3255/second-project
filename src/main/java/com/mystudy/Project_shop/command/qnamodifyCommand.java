@@ -15,13 +15,10 @@ public class qnamodifyCommand implements Command {
 	public String exec(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int qNum = Integer.parseInt(request.getParameter("qNum"));
 		String cPage = request.getParameter("cPage");
-		//String qNum = request.getParameter("qNum");
 		String id = request.getParameter("id");
 		String pwd = request.getParameter("pwd");
-		System.out.println("pwd!!!!!!!!!!!!!!!" + pwd);
 
 		String pwdout = ShopDAO.pwdcheck(qNum);
-		System.out.println("pwdout ???" + pwdout);
 		
 		//비밀번호 일치하지않으면 다시 비밀번호 확인페이지로 이동
 		if (!pwd.equals(pwdout)) {
@@ -37,7 +34,5 @@ public class qnamodifyCommand implements Command {
 		String path = "/bord/qnaModify.jsp";
 
 		return path;
-
 	}
-
 }

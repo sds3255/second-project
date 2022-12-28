@@ -24,14 +24,8 @@ public class CartAddCommand implements Command {
 			request.setAttribute("model", model);
 			return "/cart/product_content.jsp?productNum="+productnum;
 		}
-		System.out.println("model:"+model);
-		System.out.println("count:"+count);
-		System.out.println("productNum:"+productnum);
-		System.out.println("id:"+id);
-		
 		request.setAttribute("id", id);
 		ProductDAO.cartadd(productnum,id,count,model);
 		return "/cart/addok.jsp";
 	}
-
 }

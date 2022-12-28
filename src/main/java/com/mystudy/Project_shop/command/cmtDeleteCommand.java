@@ -20,12 +20,9 @@ public class cmtDeleteCommand implements Command {
 		String id = request.getParameter("id");
 		
 		int cmtDel = ShopDAO.cmtDelete(cNum);
-		
-		System.out.println("cmtDre : " + cmtDel);
-		
+				
 		request.setAttribute("cmtDre", cmtDel);
 		
 		return "Rview.jsp?id=" + id + "&cPage=" + cPage + "&bNum=" + bNum ;
 	}
-
 }

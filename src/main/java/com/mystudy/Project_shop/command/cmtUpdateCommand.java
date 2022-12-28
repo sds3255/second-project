@@ -19,11 +19,7 @@ public class cmtUpdateCommand implements Command {
 		String id = request.getParameter("id");
 		reviewCommentsVO rcvo = new reviewCommentsVO();
 		
-		
-		
 		int cmtUp = ShopDAO.cmtUpdate(rcvo);
-		
-		System.out.println("cmtUp : " + cmtUp);
 		
 		request.setAttribute("cmtUp", cmtUp);
 		

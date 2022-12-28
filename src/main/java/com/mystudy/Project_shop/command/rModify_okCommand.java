@@ -17,14 +17,10 @@ public class rModify_okCommand implements Command {
 	public String exec(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String cPage = request.getParameter("cPage");
 		int bNum = Integer.parseInt(request.getParameter("bNum"));
-		System.out.println("cPage : " + cPage); 
-		System.out.println("bNum : " + bNum); 
-		
 		String filepath = "c:/MyStudy/temp";
 		MultipartRequest mr = new MultipartRequest(
 				request, filepath, (10 * 1024 * 1024),"UTF-8", new DefaultFileRenamePolicy()
 				);
-		
 		
 		reviewVO rvo = new reviewVO();
 		rvo.setTitle(mr.getParameter("Qtitle"));
@@ -32,10 +28,6 @@ public class rModify_okCommand implements Command {
 		rvo.setFileName(mr.getParameter("fileName"));
 		rvo.setOriName(mr.getParameter("fileName"));
 		rvo.setbNum(bNum);
-		
-		System.out.println("rvo : " + rvo);
-		
-		// 첨부 파일 데이터 처리
 		if (mr.getFile("fileName") != null) { // 첨부 파일이 있으면?
 			rvo.setFileName(mr.getFilesystemName("fileName"));
 			rvo.setOriName(mr.getOriginalFileName("fileName"));
@@ -47,12 +39,8 @@ public class rModify_okCommand implements Command {
 		int result = ShopDAO.rUpdate(rvo);
 		
 		request.setAttribute("result", result);
-		request.setAttribute("id", request.getParameter("id"));
-		 
-		System.out.println("result : " + result);
-		
+		request.setAttribute("id", request.getParameter("id"));		
 	 	String path = "/bord/review.jsp?cPage=" + cPage + "&bNum=" + bNum ;
 		return path;
 	}
-
 }

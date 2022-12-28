@@ -23,15 +23,10 @@ public class updateQnaCommand2 implements Command {
 		vo.setqPwd(request.getParameter("Qpwd"));
 		vo.setqNum(qNum);
 		
-		
 		int result = ShopDAO.qnaUpdate(vo);
 		request.setAttribute("result", result);
 		
 		path = "/bord/Qnaview.jsp?cPage=" + cPage + "&qNum="+ qNum;
-		
-		
 		return path;
-				
 	}
-
 }

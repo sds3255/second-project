@@ -17,26 +17,16 @@ public class searchCommand implements Command {
 		String path = null;
 		String idx = request.getParameter("idx");
 		String keyword = request.getParameter("keyword");
-		System.out.println("idx : ~!~!!" + idx);
-		System.out.println("keyword" + keyword);
-		
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("keyword", keyword);
 		map.put("idx", idx);
-		
-		System.out.println("map!!!!!" + map);
-		
 		int cnt = ShopDAO.searchCount(map);
-		
-		 System.out.println("cnt!!!!!!! : " + cnt);
-		 request.setAttribute("cnt", cnt);
-		 request.setAttribute("idx", idx);
-		 request.setAttribute("keyword", keyword);
-		
-		 path = "searchView.jsp?cnt=" + cnt;
-		
-		
+		request.setAttribute("cnt", cnt);
+		request.setAttribute("idx", idx);
+		request.setAttribute("keyword", keyword);
+
+		path = "searchView.jsp?cnt=" + cnt;
+
 		return path;
 	}
-
 }

@@ -15,7 +15,6 @@ public class deleteQnaCommand implements Command {
 		int qNum = Integer.parseInt(request.getParameter("qNum"));
 		String cPage = request.getParameter("cPage");
 		String id = request.getParameter("id");
-		System.out.println("id : " + id);
 		
 		ShopDAO.qnaDelete(qNum);
 		

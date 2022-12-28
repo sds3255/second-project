@@ -25,9 +25,7 @@ public class cmtInertCommand implements Command {
 		
 		int mresult = ShopDAO.cmtInsert(rcVO);
 		request.setAttribute("mresult", mresult);
-
 		
 		return "Rview.jsp?cPage=" +cPage + "&bNum=" + bNum + "&id=" + id ;
 	}
-
 }

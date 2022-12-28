@@ -18,7 +18,6 @@ public class CartDAO {
 	public static int getTotalCount(String id) {
 		SqlSession ss = DBService.getFactory().openSession();
 		int totalCount = ss.selectOne("shop.totalCount3", id);
-		System.out.println("totalCount:"+totalCount);
 		ss.close();
 		return totalCount;
 	}
@@ -57,7 +56,6 @@ public class CartDAO {
 
 	// CartCommand.java에서 사용(체크데이터만 불러와서 출력)
 	public static CartVO search1(String cnum) {
-		System.out.println("search들어옴");
 		SqlSession ss = DBService.getFactory().openSession();
 		int cnumm = Integer.parseInt(cnum);
 		CartVO vo = ss.selectOne("shop.search1", cnumm);
@@ -95,9 +93,6 @@ public class CartDAO {
 		int cnumm = Integer.parseInt(cnum);
 		int totalprice = Integer.parseInt(totalPrice);
 		int totalpayprice = Integer.parseInt(totalPayPrice);
-		System.out.println("dao들어롬");
-		System.out.println("totalpayprice:"+totalpayprice);
-		System.out.println("totalPrice:"+totalPrice);
 		map.put("cNum", cnumm);
 		map.put("dName", dname);
 		map.put("dAdress", dadress);
@@ -108,14 +103,11 @@ public class CartDAO {
 		map.put("totalprice", totalprice);
 		map.put("totalpayprice", totalpayprice);
 		ss.insert("shop.insert", map);
-
 		ss.close();
-		
 	}
 
 	// PaymentCommand.java에서 아이디로 주문자 찾기시에 사용
 	public static customerVO searchCustomer(String id) {
-		System.out.println("dao:"+id);
 		SqlSession ss = DBService.getFactory().openSession();
 		customerVO vo = ss.selectOne("shop.searchCustomer", id);
 		ss.close();
@@ -134,7 +126,6 @@ public class CartDAO {
 	// 재구매시(DetailCommand에서 실행)
 	public static List<OrderListVO> getListDetail(String onum) {
 		SqlSession ss = DBService.getFactory().openSession();
-		System.out.println("dao:"+onum);
 		int onumm = Integer.parseInt(onum);
 		List<OrderListVO> vo = ss.selectList("shop.detail", onumm);
 		ss.close();
@@ -147,7 +138,6 @@ public class CartDAO {
 		Map<String, Object> map = new HashMap<String, Object>();
 		SqlSession ss = DBService.getFactory().openSession(true);
 		int onumm = Integer.parseInt(onum);
-		System.out.println("insertReorder들어옴");
 		map.put("oNum", onumm);
 		map.put("dName", dname);
 		map.put("dAdress", dadress);
@@ -170,8 +160,6 @@ public class CartDAO {
 
 	// 결제취소(환불요청)시
 	public static void refund(String onum) {
-		System.out.println("dao들어옴");
-		System.out.println("onum:"+onum);
 		SqlSession ss = DBService.getFactory().openSession(true);
 		int onumm = Integer.parseInt(onum);
 		int num = ss.update("shop.refund", onumm);
@@ -179,7 +167,6 @@ public class CartDAO {
 	}
 	// 결제취소(환불요청)시
 	public static void refundpayinfo(String onum) {
-		System.out.println("refundpayinfoDAO들어옴");
 		int onumm = Integer.parseInt(onum);
 		SqlSession ss = DBService.getFactory().openSession(true);
 		ss.delete("shop.refundpayinfo", onumm);
@@ -198,6 +185,4 @@ public class CartDAO {
 		ss.close();
 		return sequence;
 	}
-
-
 }

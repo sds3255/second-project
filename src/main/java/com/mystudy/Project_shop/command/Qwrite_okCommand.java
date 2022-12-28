@@ -14,14 +14,11 @@ public class Qwrite_okCommand implements Command {
 	@Override
 	public String exec(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		qnaVO qvo = new qnaVO();
-		System.out.println(request.getParameter("id"));
-		System.out.println(request.getParameter("Qtitle"));
 		qvo.setqTitle(request.getParameter("Qtitle"));
 		qvo.setId(request.getParameter("id"));
 		qvo.setqPwd(request.getParameter("Qpwd"));
 		qvo.setqContents(request.getParameter("Qcontent"));
 		qvo.setCustid(1);
-		
 		
 		int qnaInsert = ShopDAO.qnainsert(qvo);
 		
@@ -30,5 +27,4 @@ public class Qwrite_okCommand implements Command {
 		
 		return "/bord/qna.jsp";
 	}
-
 }

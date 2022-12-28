@@ -19,9 +19,6 @@ public class rDeleteCommand implements Command {
 		
 		request.setAttribute("Deleteresult", result);
 		
-		
 		return "/bord/review.jsp?cPage=" + cPage;
-		
 	}
-
 }
